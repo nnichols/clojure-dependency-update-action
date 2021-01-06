@@ -2,6 +2,8 @@
 
 git config --global user.email $EMAIL
 git config --global user.name $NAME
+export GITHUB_TOKEN=$TOKEN
+git checkout $BRANCH
 
 EXCLUDES=""
 for artifact in $EXCLUDE; do
@@ -23,20 +25,21 @@ UPGRADES=$(clojure -Sdeps '{:deps {antq/antq {:mvn/version "RELEASE"}}}' -m antq
 
 for upgrade in $UPGRADES; do
   IFS=',' temp=($upgrade)
-  dep_name=${temp[0]}
-  old_version=${temp[1]}
-  new_version=${temp[2]}
-  branch_name="dependencies/clojure/$dep_name-$new_version"
-  echo "Updating " $dep_name " version " $old_version " to " $new_version "\n"
-  git checkout -b $branch_name
+  DEP_NAME=${temp[0]}
+  OLD_VERSION=${temp[1]}
+  NEW_VERSION=${temp[2]}
+  BRANCH_NAME="dependencies/clojure/$DEP_NAME-$NEW_VERSION"
+  echo "Updating" $DEP_NAME "version" $OLD_VERSION "to" $NEW_VERSION
+  git checkout -b $BRANCH_NAME
   if [[ $? == 0 ]]; then
-    escaped_dep_name=`echo $dep_name | sed 's/\//\\\\\//'`
-    sed -e "/$escaped_dep_name/s/$old_version/$new_version/" deps.edn > deps2.edn
+    ESCAPED_DEP_NAME=`echo $DEP_NAME | sed 's/\//\\\\\//'`
+    sed -e "/$ESCAPED_DEP_NAME/s/$OLD_VERSION/$NEW_VERSION/" deps.edn > deps2.edn
     mv deps2.edn deps.edn
     git add deps.edn
-    git commit -m "Bump $dep_name from $old_version to $new_version"
-    git push
-    gh pr create --fill --base $BRANCH
+    git commit -m "Bump $DEP_NAME from $OLD_VERSION to $NEW_VERSION"
+    git push -u "https://$GITHUB_ACTOR:$TOKEN@github.com/$GITHUB_REPOSITORY.git" $BRANCH_NAME
+    gh pr create --fill --head $BRANCH_NAME --base $BRANCH
+    echo
     git checkout $BRANCH
   fi
 done
