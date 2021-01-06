@@ -18,14 +18,16 @@ for skip in $SKIP; do
     SKIPS="${SKIPS} --skip=${skip}"
 done
 
-UPGRADES=$(clojure -Sdeps '{:deps {antq/antq {:mvn/version "RELEASE"}}}' -m antq.core --reporter=format --error-format="{{name}},{{version}},{{latest-version}}" $EXCLUDES $DIRECTORIES $SKIPS | sed '/Failed to fetch/d')
+PREFETCH=$(clojure -Stree -Sdeps '{:deps {antq/antq {:mvn/version "RELEASE"}}}')
+UPGRADES=$(clojure -Sdeps '{:deps {antq/antq {:mvn/version "RELEASE"}}}' -m antq.core --reporter=format --error-format="{{name}},{{version}},{{latest-version}}" $EXCLUDES $DIRECTORIES $SKIPS | sed '/Failed to fetch/d' | sed '/Unable to fetch/d' | sed '/Logging initialized/d')
 
-for upgrade in $upgrades; do
+for upgrade in $UPGRADES; do
   IFS=',' temp=($upgrade)
   dep_name=${temp[0]}
   old_version=${temp[1]}
   new_version=${temp[2]}
   branch_name="dependencies/clojure/$dep_name-$new_version"
+  echo "Updating " $dep_name " version " $old_version " to " $new_version "\n"
   git checkout -b $branch_name
   if [[ $? == 0 ]]; then
     escaped_dep_name=`echo $dep_name | sed 's/\//\\\\\//'`
