@@ -1,0 +1,50 @@
+# ref: https://help.github.com/en/actions/building-actions/metadata-syntax-for-github-actions
+name: Clojure Dependency Update Action
+description: A simple GitHub Actions to create Pull Requests for outdated tools.deps dependencies
+
+author: Nick Nichols
+
+branding:
+  color: purple
+  icon: git-pull-request
+
+inputs:
+  github-token:
+    description: A GitHub auth token to be able to create the pull request
+    required: true
+  branch:
+    description: the branch to commit to
+    required: true
+    default: master
+  git-email:
+    description: 'The email address used to create the version commit with.'
+    required: true
+    default: 41898282+github-actions[bot]@users.noreply.github.com
+  git-username:
+    description: 'The name to use for the version commit. e.g. github.actor'
+    required: true
+    default: github-actions[bot]
+  excludes:
+    description: 'Artifact names to exclude (space separated).'
+    required: true
+    default: ''
+  directories:
+    description: 'Search paths for projects (space separated).'
+    required: true
+    default: ''
+  skips:
+    description: 'Project types to skip to search (space separated). Must be one of `boot`, `clojure-cli`, `github-action`, `pom`, `shadow-cljs` and `leiningen`.'
+    required: true
+    default: ''
+
+runs:
+  using: docker
+  image: Dockerfile
+  env:
+    TOKEN: ${{ inputs.github-token }}
+    EMAIL: ${{ inputs.git-email }}
+    NAME: ${{ inputs.git-username }}
+    BRANCH: ${{ inputs.branch }}
+    EXCLUDE: ${{ inputs.excludes }}
+    DIRECTORY: ${{ inputs.directories }}
+    SKIP: ${{ inputs.skips }}
