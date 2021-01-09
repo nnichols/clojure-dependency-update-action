@@ -21,7 +21,7 @@ jobs:
       uses: actions/checkout@v1
 
     - name: Check deps
-      uses: nnichols/clojure-dependency-update-action@v1
+      uses: nnichols/clojure-dependency-update-action@v2
       with:
         github-token: ${{ secrets.github_token }}
 ```
@@ -39,3 +39,9 @@ jobs:
 ## Acknowledgements
 
 Special thanks to [Chad Taylor](https://github.com/tessellator) for figuring out the initial bash script this is based on.
+
+## Licensing
+
+Copyright © 2021 [Nick Nichols](https://nnichols.github.io/)
+
+Distributed under the [MIT License](https://github.com/nnichols/clojure-dependency-update-action/blob/master/LICENSE)
