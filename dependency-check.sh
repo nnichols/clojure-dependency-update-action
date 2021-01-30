@@ -35,7 +35,7 @@ if [ $BATCH = 'true' ]; then
     ESCAPED_DEP_NAME=`echo $DEP_NAME | sed 's/\//\\\\\//'`
     sed -e "/$ESCAPED_DEP_NAME/s/$OLD_VERSION/$NEW_VERSION/" deps.edn > deps2.edn
     mv deps2.edn deps.edn
-    git add deps.edn
+    git add .
     git commit -m "Bump $DEP_NAME from $OLD_VERSION to $NEW_VERSION"
   done
   git push -u "https://$GITHUB_ACTOR:$TOKEN@github.com/$GITHUB_REPOSITORY.git" $BRANCH_NAME
@@ -55,7 +55,7 @@ else
       ESCAPED_DEP_NAME=`echo $DEP_NAME | sed 's/\//\\\\\//'`
       sed -e "/$ESCAPED_DEP_NAME/s/$OLD_VERSION/$NEW_VERSION/" deps.edn > deps2.edn
       mv deps2.edn deps.edn
-      git add deps.edn
+      git add .
       git commit -m "Bump $DEP_NAME from $OLD_VERSION to $NEW_VERSION"
       git push -u "https://$GITHUB_ACTOR:$TOKEN@github.com/$GITHUB_REPOSITORY.git" $BRANCH_NAME
       gh pr create --fill --head $BRANCH_NAME --base $BRANCH
