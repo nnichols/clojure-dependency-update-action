@@ -23,7 +23,7 @@ done
 PREFETCH=$(clojure -Stree -Sdeps '{:deps {antq/antq {:mvn/version "RELEASE"}}}')
 UPGRADES=$(clojure -Sdeps '{:deps {antq/antq {:mvn/version "RELEASE"}}}' -m antq.core --reporter=format --error-format="{{name}},{{version}},{{latest-version}}" $EXCLUDES $DIRECTORIES $SKIPS | sed '/Failed to fetch/d' | sed '/Unable to fetch/d' | sed '/Logging initialized/d')
 
-if [ $BATCH = 'true' ] then
+if [ $BATCH = 'true' ]; then
   BRANCH_NAME="dependencies/clojure/$(date +"%Y-%m-%d-%H-%M-%S")"
   git checkout -b $BRANCH_NAME
   for upgrade in $UPGRADES; do
