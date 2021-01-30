@@ -36,6 +36,10 @@ inputs:
     description: 'Project types to skip to search (space separated). Must be one of `boot`, `clojure-cli`, `github-action`, `pom`, `shadow-cljs` and `leiningen`.'
     required: true
     default: ''
+  batch:
+    description: 'Updates all outdated dependencies in a single pull request. Set to "true" to enable'
+    required: true
+    default: 'false'
 
 runs:
   using: docker
@@ -48,3 +52,4 @@ runs:
     EXCLUDE: ${{ inputs.excludes }}
     DIRECTORY: ${{ inputs.directories }}
     SKIP: ${{ inputs.skips }}
+    BATCH: ${{ inputs.batch }}

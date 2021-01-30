@@ -21,7 +21,7 @@ jobs:
       uses: actions/checkout@v1
 
     - name: Check deps
-      uses: nnichols/clojure-dependency-update-action@v2
+      uses: nnichols/clojure-dependency-update-action@v3
       with:
         github-token: ${{ secrets.github_token }}
 ```
@@ -35,6 +35,7 @@ jobs:
 * `excludes`: Artifact names to be excluded from the `antq` check. Defaults to an empty list. See [antq-action](https://github.com/liquidz/antq-action#inputs) for more information.
 * `directories`: Directories to search for project files in. Defaults to the root of the repository. See [antq-action](https://github.com/liquidz/antq-action#inputs) for more information.
 * `skips`: Build tools/files to skip by default. Defaults to an empty list. See [antq-action](https://github.com/liquidz/antq-action#inputs) for more information.
+* `batch`:  Updates all outdated dependencies in a single pull request. Set to "true" to enable
 
 ## Acknowledgements
 
