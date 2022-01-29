@@ -25,35 +25,39 @@ for skip in $SKIP; do
 done
 
 PREFETCH=$(clojure -Stree -Sdeps '{:deps {antq/antq {:mvn/version "RELEASE"}}}')
-UPGRADES=$(clojure -Sdeps '{:deps {antq/antq {:mvn/version "RELEASE"}}}' -m antq.core --reporter=format --error-format="{{name}},{{version}},{{latest-version}}" $EXCLUDES $DIRECTORIES $SKIPS | sed '/Failed to fetch/d' | sed '/Unable to fetch/d' | sed '/Logging initialized/d')
+UPGRADES=$(clojure -Sdeps '{:deps {antq/antq {:mvn/version "RELEASE"}}}' -m antq.core --reporter=format --error-format="{{name}},{{version}},{{latest-version}},{{diff-url}},{{file}}" $EXCLUDES $DIRECTORIES $SKIPS | sed '/Failed to fetch/d' | sed '/Unable to fetch/d' | sed '/Logging initialized/d')
+UPDATE_TIME=$(date +"%Y-%m-%d-%H-%M-%S")
 
-if [ $BATCH = 'true' ]; then
-  BRANCH_NAME="dependencies/clojure/$(date +"%Y-%m-%d-%H-%M-%S")"
-  git checkout -b $BRANCH_NAME
-  echo "Updating all dependencies"
-  clojure -Sdeps '{:deps {antq/antq {:mvn/version "RELEASE"}}}' -m antq.core --upgrade --force $EXCLUDES $DIRECTORIES $SKIPS
-  git add .
-  git commit -m "Update all outdated dependencies"
-  git push -u "https://$GITHUB_ACTOR:$TOKEN@github.com/$GITHUB_REPOSITORY.git" $BRANCH_NAME
-  gh pr create --fill --head $BRANCH_NAME --base $BRANCH
-  git checkout $BRANCH
-else
-  for upgrade in $UPGRADES; do
-    IFS=',' temp=($upgrade)
-    DEP_NAME=${temp[0]}
-    OLD_VERSION=${temp[1]}
-    NEW_VERSION=${temp[2]}
+for upgrade in $UPGRADES; do
+
+  # Parse each upgrade into its constituent parts
+  IFS=',' temp=($upgrade)
+  DEP_NAME=${temp[0]}
+  OLD_VERSION=${temp[1]}
+  NEW_VERSION=${temp[2]}
+  DIFF_URL=${temp[3]}
+  MODIFIED_FILE=${temp[4]}
+
+  # If we're performing a batch update, reuse the branch name
+  # Otherwise, create branch names for each unique update
+  if [ $BATCH = 'true' ]; then
+    BRANCH_NAME="dependencies/clojure/${UPDATE_TIME}"
+  else
     BRANCH_NAME="dependencies/clojure/$DEP_NAME-$NEW_VERSION"
+  fi
+
+  # Checkout the branch if it exists, otherwise create it
+  echo "Checking out" $BRANCH_NAME
+  git checkout $BRANCH_NAME || git checkout -b $BRANCH_NAME
+
+  if [[ $? == 0 ]]; then
     echo "Updating" $DEP_NAME "version" $OLD_VERSION "to" $NEW_VERSION
-    git checkout -b $BRANCH_NAME
-    if [[ $? == 0 ]]; then
-      clojure -Sdeps '{:deps {antq/antq {:mvn/version "RELEASE"}}}' -m antq.core --upgrade --force --directory=${dir} --focus=${DEP_NAME} || echo "Cannot update $DEP_NAME. Continuing" && git checkout $BRANCH && continue
-      git add .
-      git commit -m "Bump $DEP_NAME from $OLD_VERSION to $NEW_VERSION"
-      git push -u "https://$GITHUB_ACTOR:$TOKEN@github.com/$GITHUB_REPOSITORY.git" $BRANCH_NAME
-      gh pr create --fill --head $BRANCH_NAME --base $BRANCH
-      echo
-      git checkout $BRANCH
-    fi
-  done
-fi
+    clojure -Sdeps '{:deps {antq/antq {:mvn/version "RELEASE"}}}' -m antq.core --upgrade --force $DIRECTORIES --focus=${DEP_NAME} || echo "Cannot update $DEP_NAME. Continuing" && git checkout $BRANCH && continue
+    git add .
+    git commit -m "Bumped $DEP_NAME from $OLD_VERSION to $NEW_VERSION." -m "Inspect dependency changes here: $DIFF_URL"
+    git push -u "https://$GITHUB_ACTOR:$TOKEN@github.com/$GITHUB_REPOSITORY.git" $BRANCH_NAME
+    gh pr create --fill --head $BRANCH_NAME --base $BRANCH
+    echo
+    git checkout $BRANCH
+  fi
+done
