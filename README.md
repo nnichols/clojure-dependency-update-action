@@ -39,7 +39,7 @@ jobs:
 
 ```yml
 
-name: clojure-dependency-update-action Batch Tests
+name: Batch Dependency Update
 
 on: workflow_dispatch
 
