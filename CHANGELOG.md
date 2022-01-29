@@ -1,5 +1,11 @@
 # Changelog
 
+## v4 - 01/29/2022
+
+- Dependency update commit messages now link to the github diff between the old and new version.
+- Utilize antq instead of sed for updating dependencies
+- Fix multi-directory support
+
 ## v3 - 01/30/2021
 
 - Enable a batch update mode

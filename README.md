@@ -6,6 +6,8 @@ This action uses [antq](https://github.com/liquidz/antq) to check dependencies.
 
 ## Sample Usage
 
+### Basic
+
 ```yml
 name: Clojure Dependency Checking
 
@@ -18,12 +20,40 @@ jobs:
 
     steps:
     - name: Checkout Latest Commit
-      uses: actions/checkout@v1
+      uses: actions/checkout@v2.3.4
 
     - name: Check deps
-      uses: nnichols/clojure-dependency-update-action@v3
+      uses: nnichols/clojure-dependency-update-action@v4
       with:
         github-token: ${{ secrets.github_token }}
+```
+
+### Advanced
+
+```yml
+
+name: clojure-dependency-update-action Batch Tests
+
+on: workflow_dispatch
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Latest Commit
+      uses: actions/checkout@v2.3.4
+
+    - name: Check deps
+      uses:  nnichols/clojure-dependency-update-action@v4
+      with:
+        github-token: ${{ secrets.github_token }}
+        git-username: nnichols
+        skips: "pom"
+        batch: "true"
+        branch: "main"
+        directories: "cli web"
 ```
 
 ## Supported Arguments
