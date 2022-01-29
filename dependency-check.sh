@@ -40,7 +40,7 @@ for upgrade in $UPGRADES; do
 
   # If we're performing a batch update, reuse the branch name
   # Otherwise, create branch names for each unique update
-  if [ $BATCH = 'true' ]; then
+  if [ "$BATCH" == "true" ]; then
     BRANCH_NAME="dependencies/clojure/${UPDATE_TIME}"
   else
     BRANCH_NAME="dependencies/clojure/$DEP_NAME-$NEW_VERSION"
@@ -62,7 +62,7 @@ for upgrade in $UPGRADES; do
     git push -u "https://$GITHUB_ACTOR:$TOKEN@github.com/$GITHUB_REPOSITORY.git" $BRANCH_NAME
 
     # We only create pull requests per dependency in non-batch mode
-    if [$BATCH != 'true']; then
+    if [ "$BATCH" != "true" ]; then
       gh pr create --fill --head $BRANCH_NAME --base $BRANCH
     fi
 
@@ -73,7 +73,7 @@ for upgrade in $UPGRADES; do
 done
 
 # Once all updates have been made, open the pull request for batch mode
-if [$BATCH = 'true']; then
+if [ "$BATCH" == "true" ]; then
   git checkout $BRANCH_NAME
   gh pr create --fill --head $BRANCH_NAME --base $BRANCH
 fi
