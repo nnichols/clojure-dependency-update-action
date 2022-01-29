@@ -25,7 +25,10 @@ for skip in $SKIP; do
 done
 
 PREFETCH=$(clojure -Stree -Sdeps '{:deps {antq/antq {:mvn/version "RELEASE"}}}')
-UPGRADES=$(clojure -Sdeps '{:deps {antq/antq {:mvn/version "RELEASE"}}}' -m antq.core --reporter=format --error-format="{{name}},{{version}},{{latest-version}},{{diff-url}},{{file}}" $EXCLUDES $DIRECTORIES $SKIPS | sed '/Failed to fetch/d' | sed '/Unable to fetch/d' | sed '/Logging initialized/d')
+FORMATTER="--reporter=format --error-format=\"{{name}},{{version}},{{latest-version}},{{diff-url}},{{file}}\""
+UPGRADE_CMD="clojure -Sdeps '{:deps {antq/antq {:mvn/version \"RELEASE\"}}}' -m antq.core ${FORMATTER} ${EXCLUDES} ${DIRECTORIES} ${SKIPS}"
+UPGRADE_LIST=$(eval ${UPGRADE_CMD})
+UPGRADES=$(echo ${UPGRADE_LIST} | sed '/Failed to fetch/d' | sed '/Unable to fetch/d' | sed '/Logging initialized/d')
 UPDATE_TIME=$(date +"%Y-%m-%d-%H-%M-%S")
 
 for upgrade in $UPGRADES; do
@@ -54,7 +57,8 @@ for upgrade in $UPGRADES; do
 
     # Use antq to update the dependency
     echo "Updating" $DEP_NAME "version" $OLD_VERSION "to" $NEW_VERSION
-    clojure -Sdeps '{:deps {antq/antq {:mvn/version "RELEASE"}}}' -m antq.core --upgrade --force $DIRECTORIES --focus=${DEP_NAME} || $(echo "Cannot update $DEP_NAME. Continuing" && git checkout $BRANCH && continue)
+    UPDATE_CMD="clojure -Sdeps '{:deps {antq/antq {:mvn/version \"RELEASE\"}}}' -m antq.core --upgrade --force ${DIRECTORIES} --focus=${DEP_NAME}"
+    eval ${UPDATE_CMD} || $(echo "Cannot update ${DEP_NAME}. Continuing" && git checkout ${BRANCH} && continue)
 
     # Commit the dependency update, and link to the diff
     git add .
