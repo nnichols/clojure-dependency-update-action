@@ -80,6 +80,6 @@ Special thanks to [Chad Taylor](https://github.com/tessellator) for figuring out
 
 ## Licensing
 
-Copyright © 2021 [Nick Nichols](https://nnichols.github.io/)
+Copyright © 2021-2022 [Nick Nichols](https://nnichols.github.io/)
 
 Distributed under the [MIT License](https://github.com/nnichols/clojure-dependency-update-action/blob/master/LICENSE)
