@@ -1,6 +1,13 @@
 # Clojure Dependency Update Action
 
-A simple GitHub action to create Pull Requests for your out-of-date tools.deps dependencies.
+A simple GitHub action to create Pull Requests for your out-of-date dependencies in clojure projects.
+This action can automatically update the following dependency files:
+
+- [deps.edn](https://github.com/clojure/tools.deps.alpha)
+- [shadow-cljs.edn](https://github.com/thheller/shadow-cljs)
+- [project.clj](https://github.com/technomancy/leiningen)
+- [build.boot](https://github.com/boot-clj/boot)
+- [pom.xml](https://github.com/apache/maven)
 
 This action uses [antq](https://github.com/liquidz/antq) to check dependencies.
 
