@@ -27,7 +27,7 @@ jobs:
 
     steps:
     - name: Checkout Latest Commit
-      uses: actions/checkout@v2.3.4
+      uses: actions/checkout@v3.0.2
 
     - name: Check deps
       uses: nnichols/clojure-dependency-update-action@v4
@@ -50,7 +50,7 @@ jobs:
 
     steps:
     - name: Checkout Latest Commit
-      uses: actions/checkout@v2.3.4
+      uses: actions/checkout@v3.0.2
 
     - name: Check deps
       uses:  nnichols/clojure-dependency-update-action@v4
