@@ -34,7 +34,7 @@
   (format "https://github.com/%s.git" github-repository))
 
 (defn push!
-  [{:keys [github-repository branch]}]
+  [{:keys [github-repository]} branch]
   (println (format "Pushing %s to %s" branch github-repository))
   (shell/sh "git" "push" "-u" (->url github-repository) branch))
 

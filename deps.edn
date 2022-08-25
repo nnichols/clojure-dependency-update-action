@@ -1,0 +1,14 @@
+{:paths   ["src" "resources"]
+ :deps    {org.clojure/clojure             {:mvn/version "1.11.1"}
+           org.clojure/data.csv            {:mvn/version "1.0.1"}
+           compojure                       {:mvn/version "1.7.0"}
+           ring/ring                       {:mvn/version "1.9.5"}
+           ring/ring-json                  {:mvn/version "0.5.1"}
+           com.wallbrew/common-beer-format {:mvn/version "2.1.0"}}
+ :aliases {:test {:extra-paths ["test"]
+                  :extra-deps  {org.clojure/test.check    {:mvn/version "1.1.1"}
+                                ring/ring-mock            {:mvn/version "0.4.0"}
+                                talltale/talltale         {:mvn/version "0.5.8"}
+                                com.cognitect/test-runner {:git/url "https://github.com/cognitect-labs/test-runner"
+                                                           :sha     "a85b3b02765fb68684ab9ee4a8598eacf7e471d2"}}
+                  :main-opts   ["-m" "cognitect.test-runner"]}}}
