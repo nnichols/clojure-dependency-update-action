@@ -29,13 +29,14 @@
   [{:keys [library old-version new-version diff] :as change}]
   (shell/sh "git" "commit" "-m" (->bump-message change) "-m" (->diff-message change)))
 
-(defn ->authed-url
-  [git-username github-token github-repository]
+(defn ->url
+  [github-repository]
   (format "https://github.com/%s.git" github-repository))
 
 (defn push!
-  [{:keys [git-username github-token github-repository branch]}]
-  (shell/sh "git" "push" "-u" (->authed-url git-username github-token github-repository) branch))
+  [{:keys [github-repository branch]}]
+  (println (format "Pushing %s to %s" branch github-repository))
+  (shell/sh "git" "push" "-u" (->url github-repository) branch))
 
 (defn submit-pull-request!
   [branch-name base-branch]
