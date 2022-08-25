@@ -31,7 +31,7 @@
 
 (defn ->authed-url
   [git-username github-token github-repository]
-  (format "https://%s:%s@github.com/%s.git" git-username github-token github-repository))
+  (format "https://github.com/%s.git" github-repository))
 
 (defn push!
   [{:keys [git-username github-token github-repository branch]}]
