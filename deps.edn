@@ -8,7 +8,7 @@
  :aliases {:test {:extra-paths ["test"]
                   :extra-deps  {org.clojure/test.check    {:mvn/version "1.1.1"}
                                 ring/ring-mock            {:mvn/version "0.4.0"}
-                                talltale/talltale         {:mvn/version "0.5.8"}
+                                talltale/talltale         {:mvn/version "0.5.13"}
                                 com.cognitect/test-runner {:git/url "https://github.com/cognitect-labs/test-runner"
                                                            :sha     "a85b3b02765fb68684ab9ee4a8598eacf7e471d2"}}
                   :main-opts   ["-m" "cognitect.test-runner"]}}}
