@@ -24,7 +24,7 @@
         (git/add!)
         (git/commit! upgrade)
         (println "::endgroup::"))
-    (git/push! opts)
+    (git/push! opts new-branch)
     (git/submit-pull-request! new-branch branch)
     (git/checkout! branch)))
 
@@ -37,7 +37,7 @@
       (antq/upgrade-single-library! [] upgrade)
       (git/add!)
       (git/commit! upgrade)
-      (git/push! opts)
+      (git/push! opts new-branch)
       (git/submit-pull-request! new-branch branch)
       (git/checkout! branch)
       (println "::endgroup::"))))
