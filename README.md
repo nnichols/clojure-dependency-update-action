@@ -57,8 +57,8 @@ jobs:
       with:
         github-token: ${{ secrets.github_token }}
         git-username: nnichols
-        skips: "pom"
-        batch: "true"
+        skips: "pom boot"
+        batch: true
         branch: "main"
         directories: "cli web"
 ```
