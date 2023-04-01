@@ -10,14 +10,10 @@ about: Create a report to help us improve
 
 A clear and concise description of what the bug is.
 
-### Steps to Reproduce
+### Recorded Logs
 
-Steps to reproduce the behavior:
-
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+Please link to an invocation of this action, or copy the exact log output of your job.
+NOTE: Do not copy an sensitive information, customer data, or access tokens into this area.
 
 ### Expected Behavior
 
@@ -25,9 +21,8 @@ A clear and concise description of what you expected to happen.
 
 ### User Information
 
-- OS: [e.g. iOS]
-- Browser [e.g. chrome, safari]
-- Version [e.g. 22]
+Please link to or copy the relevant sections of your GitHub Action definition `.yml` file here.
+NOTE: Do not copy an sensitive information, customer data, or access tokens into this area.
 
 ### Additional Context
 
