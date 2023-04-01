@@ -95,6 +95,7 @@ for upgrade in $UPGRADES; do
   echo "Checking out" $BRANCH_NAME
   git checkout $BRANCH_NAME || git checkout -b $BRANCH_NAME
 
+  # IF we successfully created a new branch, update the dependency
   if [[ $? == 0 ]]; then
 
     # Use antq to update the dependency
@@ -102,15 +103,18 @@ for upgrade in $UPGRADES; do
     UPDATE_CMD="clojure -Sdeps '{:deps {antq/antq {:mvn/version \"RELEASE\"}}}' -m antq.core --upgrade --force ${DIRECTORIES} --focus=${DEP_NAME}"
     eval ${UPDATE_CMD} || $(echo "Cannot update ${DEP_NAME}. Continuing" && git checkout ${BRANCH} && continue)
 
+    TITLE="Bumped $DEP_NAME from $OLD_VERSION to $NEW_VERSION"
+    BODY="Inspect dependency changes here: $DIFF_URL"
+
     # Commit the dependency update, and link to the diff
     git add .
-    git commit -m "Bumped $DEP_NAME from $OLD_VERSION to $NEW_VERSION." -m "Inspect dependency changes here: $DIFF_URL"
+    git commit -m ${TITLE} -m ${BODY}
     git push -u "https://$GITHUB_ACTOR:$TOKEN@github.com/$GITHUB_REPOSITORY.git" $BRANCH_NAME
 
     # We only create pull requests per dependency in non-batch mode
     if [ "$BATCH" != "true" ]; then
       echo "Opening pull request for" $DEP_NAME
-      gh pr create --head $BRANCH_NAME --base $BRANCH --title "Bumped $DEP_NAME from $OLD_VERSION to $NEW_VERSION." --body "Inspect dependency changes here: $DIFF_URL"
+      gh pr create --head $BRANCH_NAME --base $BRANCH --title ${TITLE} --body ${BODY}
     fi
 
     # Print a blank line, and reset the branch
