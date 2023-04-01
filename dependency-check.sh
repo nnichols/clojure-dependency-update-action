@@ -1,36 +1,51 @@
 #!/bin/bash
 
+# Set active git user to the tokens provided
 git config --global user.email $EMAIL
 git config --global user.name $NAME
 export GITHUB_TOKEN=$TOKEN
+
+# Checkout the base branch for all updates
 git checkout $BRANCH
 
+# Convert the list of excluded artifacts into a set of --exclude flags
 EXCLUDES=""
 for artifact in $EXCLUDE; do
     EXCLUDES="${EXCLUDES} --exclude=${artifact}"
 done
 
+# If no directory is specified, default to the current directory
 if [ -z "${DIRECTORY}" ]; then
     DIRECTORY="."
 fi
 
+# Convert the list of directories into a set of --directory flags
 DIRECTORIES=""
 for directory in $DIRECTORY; do
     DIRECTORIES="${DIRECTORIES} --directory=${directory}"
 done
 
+# Convert the list of skip flags into a set of --skip flags
 SKIPS=""
 for skip in $SKIP; do
     SKIPS="${SKIPS} --skip=${skip}"
 done
 
+# Pre-fetch Antq. This prevents the action from parsing the output of loading the app dependencies
 PREFETCH=$(clojure -Stree -Sdeps '{:deps {antq/antq {:mvn/version "RELEASE"}}}')
+
+# Set the reporter for antq to be parsable
 FORMATTER="--reporter=format --error-format=\"{{name}},{{version}},{{latest-version}},{{diff-url}}\""
+
+# Run antq to check for outdated dependencies
 UPGRADE_CMD="clojure -Sdeps '{:deps {antq/antq {:mvn/version \"RELEASE\"}}}' -m antq.core ${FORMATTER} ${EXCLUDES} ${DIRECTORIES} ${SKIPS}"
 UPGRADE_LIST=$(eval ${UPGRADE_CMD})
+
+# Parse the output of antq into a list of upgrades, and remove any failed fetches
 UPGRADES=$(echo ${UPGRADE_LIST} | sed '/Failed to fetch/d' | sed '/Unable to fetch/d' | sed '/Logging initialized/d' | sort -u)
 UPDATE_TIME=$(date +"%Y-%m-%d-%H-%M-%S")
 
+# Iterate over all upgrades
 for upgrade in $UPGRADES; do
 
   # Parse each upgrade into its constituent parts
