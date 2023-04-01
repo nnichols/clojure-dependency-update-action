@@ -92,11 +92,11 @@ jobs:
 As the Clojure ecosystem matures, more first-class options for dependency management now support the language.
 The following is a growing list of alternative tools to consider:
 
-- [Renovatebot](https://github.com/renovatebot/renovate)
+- [Renovatebot](https://github.com/renovatebot/renovate "The RenovateBot repository")
 
 ## Acknowledgements
 
-Special thanks to [Chad Taylor](https://github.com/tessellator) for figuring out the initial bash script this is based on.
+Special thanks to [Chad Taylor](https://github.com/tessellator "Chad's GitHub Profile") for figuring out the initial bash script this is based on.
 
 ## Licensing
 
