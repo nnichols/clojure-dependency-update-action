@@ -11,6 +11,15 @@ This action can automatically update the following dependency files:
 
 This action uses [antq](https://github.com/liquidz/antq) to check dependencies.
 
+## Requirements
+
+The Actions platform is constantly being refined by the GitHub team.
+To ensure the safety of all end-users, they occasionally deprecate functionality which poses security risks.
+This impacts all first and third party Actions which you may use in your workflows.
+When diagnosing issues, please check your Actions tab for any deprecation notices.
+
+As of writing, this action requires at minimum that `actions/checkout` is set to at least `3.x.y`.
+
 ## Sample Usage
 
 ### Basic

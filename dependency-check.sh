@@ -110,7 +110,7 @@ for upgrade in $UPGRADES; do
     # We only create pull requests per dependency in non-batch mode
     if [ "$BATCH" != "true" ]; then
       echo "Opening pull request for" $DEP_NAME
-      gh pr create --fill --head $BRANCH_NAME --base $BRANCH
+      gh pr create --head $BRANCH_NAME --base $BRANCH --title "Bumped $DEP_NAME from $OLD_VERSION to $NEW_VERSION." --body "Inspect dependency changes here: $DIFF_URL"
     fi
 
     # Print a blank line, and reset the branch
