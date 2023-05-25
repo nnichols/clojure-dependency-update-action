@@ -20,6 +20,14 @@ When diagnosing issues, please check your Actions tab for any deprecation notice
 
 As of writing, this action requires that `actions/checkout` is set to at least `3.x.y`.
 
+## Maintenance Mode
+
+As of May 25, 2023 this action is now in maintenence mode.
+I will continue to support existing users by applying patches and fixes, but new feature development is frozen.
+I recommend upgrading dependency management to a cross-language tool such as [Renovate.](https://github.com/renovatebot/renovate "The RenovateBot repository")
+
+If you prefer per-language tools, you are free to fork this repository or reference its implementation in the Actions you maintain.
+
 ## Sample Usage
 
 ### Basic
