@@ -2,5 +2,16 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:base"
-  ]
+  ],
+  "labels": [
+    "dependencies"
+  ],
+  "assigneesFromCodeOwners": true,
+  "branchPrefix": "dependencies/",
+  "commitBodyTable": true,
+  "reviewersFromCodeOwners": true,
+  "schedule": [
+    "after 11am and before 8pm every weekday"
+  ],
+  "timezone": "America/Chicago"
 }
